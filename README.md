@@ -1,6 +1,7 @@
 最近笔者用上了Android Studio 3.2，感觉这个版本对C语言的支持变得更友好了，在IDE层面对C语言错误的解析上也完全兼容了GNU11标准，可谓非常舒服。所以笔者也强烈推荐各位使用Windows系统的小伙伴们可以考虑Android Studio这款完全免费的工具来开发学习C语言！
 
-大家可以在此处下载当前最新版的Android Studio：https://developer.android.google.cn/studio/。
+大家可以在此处下载当前最新版的Android Studio：[https://developer.android.google.cn/studio/](https://developer.android.google.cn/studio/)。
+
 各位放心，这个链接是Google专门针对中国开发者所设立的，因此我们无需开启任何VPN或其他服务器代理即可快速下载，而后续的插件也是能被快速下载，不需要做其他额外网络上的工作。
 
 <br />

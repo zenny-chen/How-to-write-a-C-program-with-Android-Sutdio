@@ -11,4 +11,20 @@ Android Studio默认采用的是Java编程语言，所以如果我们要做C语�
 
 完成之后，Android Studio将会弹出偏好设置对话框，并且应该默认定格在“Android SDK”这个配置选项上。各位点击“SDK Tools”选项卡，然后这里需要勾选上“CMake”、“LLDB”以及“NDK”这三项。而x86模拟器加速器也建议选中。如下图所示：
 
+![2.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/2.png)
+
+点击OK之后，Android Studio就开始安装了。
+
+安装完上述插件之后，我们就可以开始创建一个C语言项目工程了。由于一个Android项目默认使用Java，如果要用C语言的话需要通过JNI进行桥接。如果各位感觉麻烦的话，笔者这里提供了一种可以完全使用纯C语言的项目配置方法。
+各位先在欢迎界面上点击“Start a new Android Studio project”。然后进入项目名配置界面，笔者这里就使用CTest。公司名随便填，但一般格式为xxx.com，或者xxx.yyy.com。当然，这里最最重要的是**必须要勾选上**“Include C++ Support”。如下图所示：
+
+![3.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/3.png)
+
+随后我们点击“Next”按钮，进入到SDK配置界面，这里我们使用默认配置即可。再点击“Next”，进入Activity配置界面，这里同样，我们使用默认的“Empty Activity”即可。再点击“Next”按钮，进入到Activity的创建界面。由于我们这里不需要Java端的代码，也不需要GUI相关的元素，因此我们可以取消勾选“Generate Layout File”，如下图所示：
+
+![4.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/4.png)
+
+最后再次点击“Next”按钮，配置C++选项。由于我们后面要使用的是C，不是C++，因此这里使用默认的工具链配置即可。此外，下面的“Exception Support”与“Runtime Type Information Support”都**不要勾选**上。点击“Finish”按钮之后完成所有配置。我们就进入了项目工程界面。此时，Android Studio将会自动编译构建整个项目，完成之后就会跳入Activity的Java代码源文件界面。
+
+
 

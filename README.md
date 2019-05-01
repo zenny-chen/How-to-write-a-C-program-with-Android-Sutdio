@@ -26,5 +26,14 @@ Android Studio默认采用的是Java编程语言，所以如果我们要做C语�
 
 最后再次点击“Next”按钮，配置C++选项。由于我们后面要使用的是C，不是C++，因此这里使用默认的工具链配置即可。此外，下面的“Exception Support”与“Runtime Type Information Support”都**不要勾选**上。点击“Finish”按钮之后完成所有配置。我们就进入了项目工程界面。此时，Android Studio将会自动编译构建整个项目，完成之后就会跳入Activity的Java代码源文件界面。
 
+我们下面要做的事情是删除不需要的文件。我们先打开操作系统的文件管理器，进入CTest项目目录下的`app/src/`目录中，把整个“test”文件以及“androidTest”夹全都删除，如下图所示：
+
+![5.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/5.png)
+
+然后进入`app/src/main/`目录下，把整个`java`文件夹全都删除，如下图所示。
+
+![6.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/6.png)
+
+然后进入`app/src/main/cpp`目录，将“native-lib.cpp”改名为“native-lib.c”。
 
 

@@ -16,6 +16,8 @@ Android Studio默认采用的是Java编程语言，所以如果我们要做C语�
 
 点击OK之后，Android Studio就开始安装了。
 
+<br />
+
 安装完上述插件之后，我们就可以开始创建一个C语言项目工程了。由于一个Android项目默认使用Java，如果要用C语言的话需要通过JNI进行桥接。如果各位感觉麻烦的话，笔者这里提供了一种可以完全使用纯C语言的项目配置方法。
 各位先在欢迎界面上点击“Start a new Android Studio project”。然后进入项目名配置界面，笔者这里就使用CTest。公司名随便填，但一般格式为xxx.com，或者xxx.yyy.com。当然，这里最最重要的是**必须要勾选上**“Include C++ Support”。如下图所示：
 
@@ -27,6 +29,8 @@ Android Studio默认采用的是Java编程语言，所以如果我们要做C语�
 
 最后再次点击“Next”按钮，配置C++选项。由于我们后面要使用的是C，不是C++，因此这里使用默认的工具链配置即可。此外，下面的“Exception Support”与“Runtime Type Information Support”都**不要勾选**上。点击“Finish”按钮之后完成所有配置。我们就进入了项目工程界面。此时，Android Studio将会自动编译构建整个项目，完成之后就会跳入Activity的Java代码源文件界面。
 
+<br />
+
 我们下面要做的事情是删除不需要的文件。我们先打开操作系统的文件管理器，进入CTest项目目录下的`app/src/`目录中，把整个“test”文件以及“androidTest”夹全都删除，如下图所示：
 
 ![5.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/5.png)
@@ -36,6 +40,8 @@ Android Studio默认采用的是Java编程语言，所以如果我们要做C语�
 ![6.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/6.png)
 
 然后进入`app/src/main/cpp`目录，将“native-lib.cpp”改名为“native-lib.c”。
+
+<br />
 
 完成之后，我们回到Android Studio，此时Android Studio会自动刷新同步代码，我们会发现原本所包含的“native-lib.cpp”源文件不见了，我们不用捉急，先点开“manifests”文件夹中的“AndroidManifest.xml”文件，我们要对它进行编辑，如下图所示：
 
@@ -81,4 +87,68 @@ Android Studio默认采用的是Java编程语言，所以如果我们要做C语�
 </manifest>
 ```
 
+<br />
+
+Manifest文件编辑完成后，我们接着就要开始编辑gradle文件了。我们找到“build.gradle (Module:app)”这个文件，然后点开，如下图所示：
+
+![9.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/9.png)
+
+各位注意，项目工程中有两个gradle文件，别点错了。在此gradle文件中，我们只编辑`android`块中的内容。改动的地方如下图所示：
+
+![10.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/10.png)
+
+在上图中，ndk块中的abiFilters参数指定了我们当前NDK C语言项目将针对哪些处理器架构生成目标代码。这里指定了三个：'x86_64'表示针对64位x86处理器，'armeabi-v7a'表示针对ARMv7-A架构处理器，'arm64-v8a'表示针对ARMv8-A架构处理器。所以对于本demo项目而言，最终生成的目标代码中不包含32位的x86架构，因此我们后面在设置模拟器的时候需要先下载64位的x86模拟器，后面会详细描述。
+
+下面给出完整的gradle文件内容：
+
+```gradle
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.zenny_chen.ctest"
+        minSdkVersion 17
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                // 对于ARMv7-A架构处理器的平台，使用NEON技术；对于所有ARM架构处理器的平台，使用ARM模式指令
+                arguments "-DANDROID_ARM_NEON=TRUE", "-DANDROID_ARM_MODE=arm"
+
+                // C语言使用GNU11标准，并以代码最小尺寸最快速度进行优化
+                cFlags "-std=gnu11", "-Os"
+            }
+        }
+        ndk {
+            // Specifies the ABI configurations of your native
+            // libraries Gradle should build and package with your APK.
+            abiFilters 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+```
+
+<br />
 

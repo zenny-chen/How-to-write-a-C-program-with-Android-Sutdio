@@ -534,4 +534,22 @@ void android_main(struct android_app* app)
 
 <br />
 
+我们在本demo中有写文件功能。那么我们如何查看所写文件的结果呢？
+无论是在Android模拟器中还是对于真机设备，如果我们要查看模拟器设备里所写入的文件内容，那么我们可以利用Android Studio自带的Device File Explorer工具。在版本较老的Android Studio中，Device File Explorer在工具栏上，可见这篇博文：https://blog.csdn.net/zhaoyanjun6/article/details/72284543
+
+而在较新的版本中它藏在整个IDE工具的右下角，如下所示：
+
+![24.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/24.png)
+
+这界面设计得非常诡异……然后我们选择需要查看的设备，再根据打印输出的路径找到我们所写的文件。然后鼠标右键点击它，再选择“Save As”另存为到我们自己桌面系统上的某个路径下即可，如下图所示：
+
+![25.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/25.png)
+
+<br />
+
+下面我们将谈谈Android Studio对程序的调试。跟其他主流IDE一样，Android Studio也允许我们使用断点调试。不过目前能支持断点的只有Java（包括Kotlin）、C和C++源文件，汇编源文件不支持断点调试。设置断点的方法也跟其他主流IDE一样，在代码编辑框左侧显示行号的灰色区域鼠标左键点击一下即可。当程序执行到断点这一行后将会暂停，此时我们可以观察各个局部变量以及全局变量的值。不过这里需要注意的是，使用Android Studio调试程序时不能点击运行按钮，而是必须点击**调试按钮**，它位于下图所示的工具栏：
+
+![26.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/26.png)
+
+<br />
 

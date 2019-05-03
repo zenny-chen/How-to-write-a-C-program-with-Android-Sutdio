@@ -247,3 +247,10 @@ target_link_libraries( # Specifies the target library.
 
 <br />
 
+下面我们就可以开始编辑native-lib.c源文件了。由于这是一个Android应用，因此它是没有传统上的`main`函数的，取而代之的是以`android_main`作为函数入口。此外，Android NDK中也去除了C语言的标准输入输出流，因为它不是一个控制台应用，所以如果我们需要动态输入数据的话只能通过读写文件进行。
+这里简单介绍一下Android的文件系统资源管理体系。如果我们要在当前App中去读某个**只读**的资源文件的话，可以将该文件放在***assets***目录内，assets目录会被拷贝到当前App相关的目录中。由于Android Studio所生成的项目中没有默认生成assets文件夹，因此我们需要手工在当前项目工程的`app/src/main/`目录下创建assets目录，如下图所示：
+
+![16.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/16.png)
+
+随后，我们将需要被App所读的文件放入该assets文件夹里即可。Android NDK提供了一套接口用于访问assets中的文件资源：
+

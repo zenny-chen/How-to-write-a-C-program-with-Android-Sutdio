@@ -2,7 +2,7 @@
 
 大家可以在此处下载当前最新版的Android Studio：[https://developer.android.google.cn/studio/](https://developer.android.google.cn/studio/)。
 
-各位放心，这个链接是Google专门针对中国开发者所设立的，因此我们无需开启任何VPN或其他服务器代理即可快速下载，而后续的插件也是能被快速下载，不需要做其他额外网络上的工作。
+各位放心，这个链接是Google专门针对中国开发者所设立的，因此我们无需开启任何VPN或其他服务器代理即可快速下载，而后续的插件也是能被快速下载，不需要做其他额外网络配置上的工作。
 
 <br />
 
@@ -36,5 +36,49 @@ Android Studio默认采用的是Java编程语言，所以如果我们要做C语�
 ![6.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/6.png)
 
 然后进入`app/src/main/cpp`目录，将“native-lib.cpp”改名为“native-lib.c”。
+
+完成之后，我们回到Android Studio，此时Android Studio会自动刷新同步代码，我们会发现原本所包含的“native-lib.cpp”源文件不见了，我们不用捉急，先点开“manifests”文件夹中的“AndroidManifest.xml”文件，我们要对它进行编辑，如下图所示：
+
+![7.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/7.png)
+
+我们需要在`<application>`标签中添加`android:hasCode="false"`属性，表示我们不需要Java代码。然后替换掉整个`<activity>`标签内容。修改内容如下图所示：
+
+![8.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/8.png)
+
+下面列出完整的“AndroidManifest.xml”文件的代码：
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zenny_chen.ctest">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:hasCode="false">
+        <!-- 我们不需要Java代码 -->
+
+        <!-- Our activity is the built-in NativeActivity framework class.
+             This will take care of integrating with our NDK code. -->
+        <activity android:name="android.app.NativeActivity"
+            android:label="@string/app_name"
+            android:configChanges="orientation|keyboardHidden">
+            <!-- Tell NativeActivity the name of our .so -->
+            <meta-data android:name="android.app.lib_name"
+                android:value="native-lib" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
+```
 
 

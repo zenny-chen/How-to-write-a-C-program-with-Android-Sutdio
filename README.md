@@ -152,3 +152,98 @@ dependencies {
 
 <br />
 
+这个完成之后，我们最后再要编辑一下CMakeLists.txt文件。它在下图所示的位置：
+
+![11.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/11.png)
+
+由于Android Studio使用的是CMake工具，因此对源文件的编译配置以及动态库的生成都在这个文件中指定。该文件内容如下所示：
+
+```cmake
+# For more information about using CMake with Android Studio, read the
+# documentation: https://d.android.com/studio/projects/add-native-code.html
+
+# Sets the minimum version of CMake required to build the native library.
+
+cmake_minimum_required(VERSION 3.4.1)
+
+include(AndroidNdkModules)
+android_ndk_import_module_cpufeatures()
+android_ndk_import_module_native_app_glue()
+
+# Export ANativeActivity_onCreate(),
+# Refer to: https://github.com/android-ndk/ndk/issues/381.
+set(CMAKE_SHARED_LINKER_FLAGS
+        "${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate")
+
+# Creates and names a library, sets it as either STATIC
+# or SHARED, and provides the relative paths to its source code.
+# You can define multiple libraries, and CMake builds them for you.
+# Gradle automatically packages shared libraries with your APK.
+
+add_library( # Sets the name of the library.
+        native-lib
+
+        # Sets the library as a shared library.
+        SHARED
+
+        # Provides a relative path to your source file(s).
+        src/main/cpp/native-lib.c)
+
+# Searches for a specified prebuilt library and stores the path as a
+# variable. Because CMake includes system libraries in the search path by
+# default, you only need to specify the name of the public NDK library
+# you want to add. CMake verifies that the library exists before
+# completing its build.
+
+find_library( # Sets the name of the path variable.
+        log-lib
+
+        # Specifies the name of the NDK library that
+        # you want CMake to locate.
+        log)
+
+# Specifies libraries CMake should link to your target library. You
+# can link multiple libraries, such as libraries you define in this
+# build script, prebuilt third-party libraries, or system libraries.
+
+target_link_libraries( # Specifies the target library.
+        native-lib
+        cpufeatures
+        android
+        native_app_glue
+
+        # Links the target library to the log library
+        # included in the NDK.
+        ${log-lib})
+```
+
+对于上述配置代码，对于初学者而言只需知道以下几点：
+1. `add_library`下面的第一行用于指定当前编译构建项目最终所生成的库的名称。
+1. `add_library`下面的第二行用于指定当前项目使用的是静态库还是动态库。由于我们整个项目最终要被Android系统的Java虚拟机调用，所以这里需要生成动态库，用`SHARED`指定。
+1. `add_library`下面的第三行起就用于指定我们整个项目所要编译构建的源文件。这里可以填写.c源文件、.cpp源文件或.asm汇编源文件。多个源文件之间用**空格符**或**换行符**进行分隔。这里还需注意的是，源文件的根目录为`src/main/cpp/`，这个需要加上，当然，我们在此根目录下还可以再添加自己的文件夹。
+1. 在`target_link_libraries`中需要把我们当前生成的库本身加进去，一般就放在第一个位置。
+
+<br />
+
+这些配置工作就全都完成之后，Android Studio会在右上角弹出“Sync”超链接样式的按钮，我们点击它，对整个项目重新构建。然后我们就能看到“native-lib.c”这个源文件了。它在下图所示的位置：
+
+![12.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/12.png)
+
+<br />
+
+一般情况下，Android Studio默认使用的文件编码格式为UTF-8，但在Windows系统上可能默认设置为GBK，所以如果我们想要用跨平台通用的UTF-8文件编码格式的话可以在Android Studio的偏好设置中查看当前设置的文件编码格式是否为UTF-8。我们先找到设置文件编码格式的地方，如下图所示：
+
+![13.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/13.png)
+
+随后，我们在右侧可以看到当前配置的全局编码格式与项目编码格式，我们都将它们配置为UTF-8编码格式，如下图所示。
+
+![14.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/14.png)
+
+此外，在下方我们再检查一下“Create UTF-8 Files”是否为“with NO BOM”，我们所创建的UTF-8文件应该不带有BOM。
+
+![15.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/15.png)
+
+都设置完成后点击右下方的“OK”按钮即可。
+
+<br />
+

@@ -553,3 +553,85 @@ void android_main(struct android_app* app)
 
 <br />
 
+当我们点击调试按钮之后，程序将会以调试模式开始运行。当程序运行到我们设置断点的那行代码之后会出现如下图所示的情况：
+
+![27.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/27.png)
+
+这里我们可以看到，当程序执行到断点处那行之后，该行代码会以蓝色条高亮显示，同时断点里面也会有一个浅蓝色的打勾标记。而在下面左侧有一排按钮。在Debug选项栏中的绿色按钮表示Resume，即让当前程序继续执行。红色方块则表示停止当前程序的运行。在右侧也有两个选项卡，默认定格在Varaibles，这个用于观察当前函数里的局部变量。观察全局变量有两种形式，一种是直接在源文件中找到所要观察的那个全局变量，然后鼠标光标指向该变量名，然后Android Studio稍后就会显示出该全局变量的值。还有一种是使用调试器本身对表达式的计算能力，下面我们就来讲这个东西。我们直接点击下图所示的红色框框出来的按钮，就能弹出计算表达式的框框。
+
+![28.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/28.png)
+
+然后我们在弹出的框框中输入当前调试器的上下文已经可见的变量，即可进行随意计算，甚至可以立即修改某个变量的值，如果它不是常量的话。如下图所示：
+
+![29.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/29.png)
+
+除了点击“计算表达式”的按钮之外，我们也可以利用LLDB功能来做更多更复杂的功能，如下图所示：
+
+![30.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/30.png)
+
+是不是非常方便，而又灵活强大呢？😁
+
+<br />
+
+有经验的程序员都知道，无论是C语言项目还是Java项目，它们都有两种编译构建模式，一种是Debug模式，另一种是Release模式。Debug模式下代码生成非常规整，且便于调试。而在Release模式下，编译器将会根据我们所指定的优化选项对代码做大幅优化，此时代码运行速度会变快，但不易于调试。因此当我们在调试程序时往往需要使用调试模式，而这也是各大IDE的默认选项。如果我们要发布程序了，那么可以切换到Release模式，使得程序的运行时性能更好。在Android Studio中也有设置构建模式的方法。它位于整个IDE的左下角，名为“Build Variants”。我们点击它将会弹出半浮框，随后我们就可以设置自己所需的构建了，如下图所示：
+
+![31.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/31.png)
+
+在默认情况下，Android Studio使用的是Debug模式，我们点击“Debug”将会出现下拉框，我们可以选择“Release”来改选为Release模式。
+
+<br />
+
+为了能让各位在Android Studio中更体面地使用打印语句（比如`printf`和`puts`），笔者这里给各位提供一个现成的公共头文件：
+
+```c
+// zenny_common.h
+
+#pragma once
+
+#ifdef __ANDROID__
+
+#include <syslog.h>
+
+#define printf(...)     syslog(LOG_INFO, __VA_ARGS__)
+
+#define puts(cstr)      printf("%s\n", cstr)
+
+#endif
+
+#ifndef     let
+#define     let     __auto_type
+#endif
+
+```
+
+假定该内容被保存为“zenny_common.h”，那么我们在C源文件中使用的时候可以将它**包含在最后一个include的位置处**。之所以这里要特别提到放到最后一个include位置，是因为这个宏会将<stdio.h>中所定义的符号给替换掉，因此它至少必须声明在`#include <stdio.h>`的下面。然后我们在C函数中就可以这么写了：
+
+```c
+#include <stdio.h>
+#include <stdbool.h>
+#include <cpu-features.h>
+
+#include "zenny_common.h"
+
+
+static void Test(void)
+{
+    puts("Hello, world!");
+
+    let a = 10, b = 20;
+
+    printf("The sum is: %d\n", a + b);
+}
+```
+
+如果各位运行程序的话，将会在Logcat里看到以下打印输出：
+
+![32.png](https://github.com/zenny-chen/How-to-write-a-C-program-with-Android-Sutdio/blob/master/32.png)
+
+<br />
+
+如果各位想通过Android Studio让Java与C混用的，可以参考此博文：[在Android Studio 3.0中使用C语言以及汇编语言](https://www.jianshu.com/p/d2968991710b)
+
+而关于JNI的详细介绍可以参考此博文：[Java JNI接口的详细描述](https://www.jianshu.com/p/5c75f9ed5d94)
+
+最后附赠各个处理器架构在各大编译器上的预定义的宏：[https://sourceforge.net/p/predef/wiki/Architectures/](https://sourceforge.net/p/predef/wiki/Architectures/)

@@ -118,8 +118,8 @@ android {
                 // 对于ARMv7-A架构处理器的平台，使用NEON技术；对于所有ARM架构处理器的平台，使用ARM模式指令
                 arguments "-DANDROID_ARM_NEON=TRUE", "-DANDROID_ARM_MODE=arm"
 
-                // C语言使用GNU11标准，并以代码最小尺寸最快速度进行优化
-                cFlags "-std=gnu11", "-Os"
+                // C语言使用GNU17标准，并以代码最小尺寸最快速度进行优化
+                cFlags "-std=gnu17", "-Os"
             }
         }
         ndk {
@@ -169,6 +169,9 @@ cmake_minimum_required(VERSION 3.4.1)
 include(AndroidNdkModules)
 android_ndk_import_module_cpufeatures()
 android_ndk_import_module_native_app_glue()
+
+# 设置公共的C语言编译选项，如果不在gradle中设置，则也可以在此设置
+set(CMAKE_C_FLAGS "-std=gnu17 -Os ${CMAKE_C_FLAGS}")
 
 # Export ANativeActivity_onCreate(),
 # Refer to: https://github.com/android-ndk/ndk/issues/381.

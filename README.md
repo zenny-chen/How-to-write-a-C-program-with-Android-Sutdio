@@ -638,8 +638,7 @@ static void Test(void)
 
 <br />
 
-如果各位想通过Android Studio让Java与C混用的，可以参考此博文：[在Android Studio 3.0中使用C语言以及汇编语言](https://www.jianshu.com/p/d2968991710b)
+如果各位想通过Android Studio让Java与C混用的，可以参考此博文：[在Android Studio 3.0中使用C语言以及汇编语言](https://github.com/zenny-chen/Using-C-and-Assembly-Language-in-Android-Studio-3.0)
 
 而关于JNI的详细介绍可以参考此博文：[Java JNI接口的详细描述](https://www.jianshu.com/p/5c75f9ed5d94)
 
-最后附赠各个处理器架构在各大编译器上的预定义的宏：[https://sourceforge.net/p/predef/wiki/Architectures/](https://sourceforge.net/p/predef/wiki/Architectures/)

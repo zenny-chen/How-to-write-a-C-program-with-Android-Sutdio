@@ -83,6 +83,7 @@ Android Studio默认采用的是Java编程语言，所以如果我们要做C语�
                 android:value="native-lib" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
